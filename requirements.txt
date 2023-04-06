@@ -1,0 +1,7 @@
+Pillow==9.5.0
+pypng==0.20220715.0
+qrcode==7.4.2
+reportlab==3.6.12
+reportlab-qrcode==0.1.4
+typing_extensions==4.5.0
+argparse

@@ -178,6 +178,9 @@ class BadgeMaker:
         borderleft = self.layout['borders'][0]
         borderbottom = self.layout['borders'][1]
 
+        interx = self.layout['padding'][0]
+        intery = self.layout['padding'][1]
+
         c = canvas.Canvas(outputfile, pagesize=papertype)
 
         if self.debug:
@@ -187,6 +190,12 @@ class BadgeMaker:
             # Calculate the position of the box based on the box size and grid size
             x = borderleft + (badgeindex % columns) * badge_width
             y = borderbottom + (badgeindex // columns) % (rows) * badge_height
+
+            if interx:
+                x = x + (badgeindex % columns) * interx
+            if intery:
+                y = y + ((badgeindex % (rows*columns)) // columns) * intery
+
             entry['row'] = i
             self.fill_badge(c, x, y, badge_width, badge_height, entry)
             

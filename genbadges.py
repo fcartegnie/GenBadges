@@ -68,6 +68,7 @@ def make_vcard(
 class BadgeMaker:
     entries = []
     layout = None
+    debug = False
     
     def __init__(self, layout):
         self.layout = layout
@@ -97,7 +98,8 @@ class BadgeMaker:
             
 
     def fill_badge(self, c, x, y, width, height, entry):
-        c.rect(x, y, width, height, stroke=1, fill=0)
+        if self.debug:
+            c.rect(x, y, width, height, stroke=1, fill=0)
         
         padding = 3 * mm
         x += padding / 2
@@ -178,6 +180,9 @@ class BadgeMaker:
 
         c = canvas.Canvas(outputfile, pagesize=papertype)
 
+        if self.debug:
+            c.rect(0, 0, pagewidth, pageheight, stroke=1, fill=0)
+
         for i, entry in enumerate(self.entries):
             # Calculate the position of the box based on the box size and grid size
             x = borderleft + (badgeindex % columns) * badge_width
@@ -199,9 +204,13 @@ class BadgeMaker:
         self.open_csv(inputfile, csvrange)
         self.generate_pdf(outputfile, start)
 
+    def set_debug(self):
+        self.debug = True
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--layout", default=knownlayouts['4278'])
+    parser.add_argument("--debug", action='store_true', help="print with layout debugging marks")
     parser.add_argument("--layout-list", action="store_true", help="display supported layouts")
     parser.add_argument("--start", type=int, help="start number of layout sticker", default=0)
     parser.add_argument("--csvfirst", type=int, help="csv entries first index to process")
@@ -222,6 +231,8 @@ def main():
         exit(1)
     else:
         badge_maker = BadgeMaker(args.layout)
+        if args.debug:
+            badge_maker.set_debug()
         badge_maker.run(getattr(args, 'input.csv'), getattr(args, 'output.pdf'), args.start, (args.csvfirst, args.csvlast))
         exit(0)
     pass

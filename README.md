@@ -45,7 +45,7 @@ Other options available with the usual help
 
 Prints the 5th and 6th entries from the CSV file starting on the 3rd sticker position
 
-    python genbadge.py infile.csv outfile.pdf --start=3 --csvfirst=5 --csvfirst=6
+    python genbadge.py infile.csv outfile.pdf --start=3 --csvfirst=5 --csvlast=6
 
 Note the stickers are numbered from bottom to top, from left to right. *Read it again*
 

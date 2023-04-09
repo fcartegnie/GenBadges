@@ -102,12 +102,21 @@ class BadgeMaker:
             if w < width or fontsize <= 0.5:
                 return [ fontsize, w, h ]
             fontsize -= 0.5
-            
+
+    def scaled_pt(self, v, h):
+        return v * h / (50.8 * mm) # was designed against 50.8
 
     def fill_badge(self, c, x, y, width, height, entry):
         if self.debug:
             c.rect(x, y, width, height, stroke=1, fill=0)
-        
+
+        fontsizes = {}
+        fontsizes['type'] = self.scaled_pt(16, height)
+        fontsizes['name'] = self.scaled_pt(22, height)
+        fontsizes['name_min'] = self.scaled_pt(16, height)
+        fontsizes['role'] = self.scaled_pt(16, height)
+        fontsizes['company'] = self.scaled_pt(16, height)
+
         padding = 3 * mm
         x += padding / 2
         y += padding / 2
@@ -122,7 +131,7 @@ class BadgeMaker:
             c.saveState()
             # c.roundRect(x, y + height - height * 0.15, width, height * 0.15, 1*mm, stroke=1, fill=1)
             # c.setFillColor(HexColor(0xffffff))
-            metrics = self.fit_text( entry[csvkeymap['type']].upper(), 'Vera', 16, width, height * 0.15 )
+            metrics = self.fit_text( entry[csvkeymap['type']].upper(), 'Vera', fontsizes['type'], width, height * 0.15 )
             c.setFont('Vera', metrics[0])
             c.drawString(x, y + height - height * 0.075 - metrics[2], entry[csvkeymap['type']].upper())
             c.restoreState()
@@ -134,15 +143,15 @@ class BadgeMaker:
         posy = y + height - height * 0.35 - 5 * mm
         fullname = entry[csvkeymap['firstname']] + " " + entry[csvkeymap['lastname']];
         print("Generating badge for: ", fullname)
-        metrics = self.fit_text( fullname, 'VeraBold', 22, width, height * 0.20 )
-        if metrics[0] >= 16:
+        metrics = self.fit_text( fullname, 'VeraBold', fontsizes['name'], width, height * 0.20 )
+        if metrics[0] >= fontsizes['name_min']:
             posy -= metrics[2]
             c.setFont('VeraBold', metrics[0])
             c.drawString(x, posy, fullname)
         else:
             posy = y + height - height * 0.20 - 5 * mm
-            metricsA = self.fit_text( entry[csvkeymap['firstname']], 'VeraBold', 22, width, height * 0.20 )
-            metricsB = self.fit_text( entry[csvkeymap['lastname']], 'VeraBold', 22, width, height * 0.20 )
+            metricsA = self.fit_text( entry[csvkeymap['firstname']], 'VeraBold', fontsizes['name'], width, height * 0.20 )
+            metricsB = self.fit_text( entry[csvkeymap['lastname']], 'VeraBold', fontsizes['name'], width, height * 0.20 )
             metrics = metricsA if metricsA[0] <= metricsB[0] else metricsB
             posy -= metrics[2]
             c.setFont('VeraBold', metrics[0])
@@ -154,11 +163,11 @@ class BadgeMaker:
 
         # company 
         c.saveState()
-        metrics = self.fit_text( entry[csvkeymap['role']], 'Vera', 16, width - qrcodesize, height * 0.20 )
+        metrics = self.fit_text( entry[csvkeymap['role']], 'Vera', fontsizes['role'], width - qrcodesize, height * 0.20 )
         posy -= metrics[2] + 5*mm
         c.setFont('Vera', metrics[0])
         c.drawString(x, posy, entry[csvkeymap['role']])
-        metrics = self.fit_text( entry[csvkeymap['company']], 'Vera', 16, width - qrcodesize, height * 0.20 )
+        metrics = self.fit_text( entry[csvkeymap['company']], 'Vera', fontsizes['company'], width - qrcodesize, height * 0.20 )
         posy -= metrics[2] + 5*mm
         c.setFont('Vera', metrics[0])
         c.drawString(x, posy, entry[csvkeymap['company']])

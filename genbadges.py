@@ -48,6 +48,13 @@ knownlayouts = {
                 'padding': (0, 0),
                 'borders': ((A4[0] - 3 * 70*mm) / 2, (A4[1] - 5 * 42.3*mm) / 2),
                 'desc': "HERMA Premium White Labels 70 x 42.3mm" },
+     '1212' : { 'page': A4,
+                'card': (70, 37),
+                'rows': 8,
+                'cols': 3,
+                'padding': (0, 0),
+                'borders': ((A4[0] - 3 * 70*mm) / 2, (A4[1] - 8 * 37*mm) / 2),
+                'desc': "APLI White Labels 70 x 37mm" },
 }
 
 def make_vcard(
@@ -218,7 +225,7 @@ class BadgeMaker:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--layout", default=knownlayouts['4278'])
+    parser.add_argument("--layout", default=knownlayouts['1212'])
     parser.add_argument("--debug", action='store_true', help="print with layout debugging marks")
     parser.add_argument("--layout-list", action="store_true", help="display supported layouts")
     parser.add_argument("--start", type=int, help="start number of layout sticker", default=0)

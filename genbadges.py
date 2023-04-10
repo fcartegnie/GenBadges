@@ -234,7 +234,7 @@ class BadgeMaker:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--layout", default=knownlayouts['1212'])
+    parser.add_argument("--layout", default=knownlayouts['4278'])
     parser.add_argument("--debug", action='store_true', help="print with layout debugging marks")
     parser.add_argument("--layout-list", action="store_true", help="display supported layouts")
     parser.add_argument("--start", type=int, help="start number of layout sticker", default=0)

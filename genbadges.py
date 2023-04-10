@@ -78,7 +78,7 @@ class BadgeMaker:
     debug = False
     
     def __init__(self, layout):
-        self.layout = layout
+        self.layout = knownlayouts[layout]
         pdfmetrics.registerFont(TTFont('Vera', 'Vera.ttf'))
         pdfmetrics.registerFont(TTFont('VeraBold', 'VeraBd.ttf'))
         pass
@@ -234,7 +234,7 @@ class BadgeMaker:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--layout", default=knownlayouts['4278'])
+    parser.add_argument("--layout", default='4278')
     parser.add_argument("--debug", action='store_true', help="print with layout debugging marks")
     parser.add_argument("--layout-list", action="store_true", help="display supported layouts")
     parser.add_argument("--start", type=int, help="start number of layout sticker", default=0)

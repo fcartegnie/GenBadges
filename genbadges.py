@@ -117,7 +117,7 @@ class BadgeMaker:
         fontsizes['role'] = self.scaled_pt(16, height)
         fontsizes['company'] = self.scaled_pt(16, height)
 
-        padding = 3 * mm
+        padding = 5 * mm
         x += padding / 2
         y += padding / 2
         width -= padding

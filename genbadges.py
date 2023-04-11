@@ -172,11 +172,11 @@ class BadgeMaker:
 
         # company 
         c.saveState()
-        metrics = self.fit_text( entry[csvkeymap['role']], 'Vera', fontsizes['role'], width - qrcodesize, height * 0.20 )
+        metrics = self.fit_text( entry[csvkeymap['role']], 'Vera', fontsizes['role'], width, height * 0.20 )
         posy -= metrics[2] + 5*mm
         c.setFont('Vera', metrics[0])
         c.drawString(x, posy, entry[csvkeymap['role']])
-        metrics = self.fit_text( entry[csvkeymap['company']], 'Vera', fontsizes['company'], width - qrcodesize, height * 0.20 )
+        metrics = self.fit_text( entry[csvkeymap['company']], 'Vera', fontsizes['company'], width, height * 0.20 )
         posy -= metrics[2] + 5*mm
         c.setFont('Vera', metrics[0])
         c.drawString(x, posy, entry[csvkeymap['company']])

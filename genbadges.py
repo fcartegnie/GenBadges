@@ -23,8 +23,10 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.colors import HexColor
 from reportlab_qrcode import QRCodeImage
+from reportlab.pdfbase.cidfonts import UnicodeCIDFont
 #from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 import argparse
+import regex
 
 csvkeymap = { 'type': 'Type of Participant',
               'email': 'Email',
@@ -81,6 +83,7 @@ class BadgeMaker:
         self.layout = knownlayouts[layout]
         pdfmetrics.registerFont(TTFont('Vera', 'Vera.ttf'))
         pdfmetrics.registerFont(TTFont('VeraBold', 'VeraBd.ttf'))
+        pdfmetrics.registerFont(UnicodeCIDFont('HeiseiMin-W3'))
         pass
 
     def open_csv(self, filename, csvrange):
@@ -105,6 +108,11 @@ class BadgeMaker:
 
     def scaled_pt(self, v, h):
         return v * h / (50.8 * mm) # was designed against 50.8
+
+    def get_font_for_text(self, text):
+        if regex.findall(r'\p{Han}+', text):
+            return 'HeiseiMin-W3'
+        return 'VeraBold'
 
     def fill_badge(self, c, x, y, width, height, entry):
         if self.debug:
@@ -142,22 +150,23 @@ class BadgeMaker:
         c.saveState()
         posy = y + height - height * 0.35 - 5 * mm
         fullname = entry[csvkeymap['firstname']] + " " + entry[csvkeymap['lastname']];
+        namesfont = self.get_font_for_text(fullname)
         print("Generating badge for: ", fullname)
-        metrics = self.fit_text( fullname, 'VeraBold', fontsizes['name'], width, height * 0.20 )
+        metrics = self.fit_text( fullname, namesfont, fontsizes['name'], width, height * 0.20 )
         if metrics[0] >= fontsizes['name_min']:
             posy -= metrics[2]
-            c.setFont('VeraBold', metrics[0])
+            c.setFont(namesfont, metrics[0])
             c.drawString(x, posy, fullname)
         else:
             posy = y + height - height * 0.20 - 5 * mm
-            metricsA = self.fit_text( entry[csvkeymap['firstname']], 'VeraBold', fontsizes['name'], width, height * 0.20 )
-            metricsB = self.fit_text( entry[csvkeymap['lastname']], 'VeraBold', fontsizes['name'], width, height * 0.20 )
+            metricsA = self.fit_text( entry[csvkeymap['firstname']], namesfont, fontsizes['name'], width, height * 0.20 )
+            metricsB = self.fit_text( entry[csvkeymap['lastname']], namesfont, fontsizes['name'], width, height * 0.20 )
             metrics = metricsA if metricsA[0] <= metricsB[0] else metricsB
             posy -= metrics[2]
-            c.setFont('VeraBold', metrics[0])
+            c.setFont(namesfont, metrics[0])
             c.drawString(x, posy, entry[csvkeymap['firstname']])
             posy -= metrics[2] + 5 * mm
-            c.setFont('VeraBold', metrics[0])
+            c.setFont(namesfont, metrics[0])
             c.drawString(x, posy, entry[csvkeymap['lastname']])        
         c.restoreState()
 

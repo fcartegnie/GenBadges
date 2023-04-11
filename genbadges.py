@@ -63,12 +63,14 @@ def make_vcard(
         first_name,
         last_name,
         company,
+        title,
         email):
     return '\r\n'.join([
         'BEGIN:VCARD',
         'VERSION:2.1',
         f'N:{last_name};{first_name}',
         f'ORG:{company}',
+        f'TITLE:{title}',
         f'EMAIL:{email}',
         'END:VCARD'
     ])
@@ -185,6 +187,7 @@ class BadgeMaker:
         qrdata = make_vcard(entry[csvkeymap['firstname']],
                             entry[csvkeymap['lastname']],
                             entry[csvkeymap['company']],
+                            entry[csvkeymap['role']],
                             entry[csvkeymap['email']])
         qr = QRCodeImage(qrdata, size=qrcodesize, border=1*mm)
         qr.drawOn(c, x + width - qrcodesize, y + height - qrcodesize)

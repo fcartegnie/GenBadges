@@ -161,7 +161,7 @@ class BadgeMaker:
             c.drawString(x, posy, fullname)
         else:
             posy = y + height - height * 0.20 - 5 * mm
-            metricsA = self.fit_text( entry[csvkeymap['firstname']], namesfont, fontsizes['name'], width, height * 0.20 )
+            metricsA = self.fit_text( entry[csvkeymap['firstname']], namesfont, fontsizes['name'], width - qrcodesize, height * 0.20 )
             metricsB = self.fit_text( entry[csvkeymap['lastname']], namesfont, fontsizes['name'], width, height * 0.20 )
             metrics = metricsA if metricsA[0] <= metricsB[0] else metricsB
             posy -= metrics[2]
